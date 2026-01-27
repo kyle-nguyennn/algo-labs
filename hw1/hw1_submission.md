@@ -1,4 +1,4 @@
-### Problem:
+## Graded Problem
 2 workers Claude and Gemma work on a Multi-Conveyer Pipeline to assemble ragdolls.
 Each regdoll assembly consists of n steps.
 Given:
@@ -10,7 +10,7 @@ Given:
 - The person who performs step n must also package. (as clarified in Ed post #110)
 Mininize the total time to produce a ragdoll.
 
-### Solution:
+## Solution
 #### 1. Definition
 Let $T(w, i)$ be the minimum total time to complete steps $1..i$ (inclusive), where the worker who performs step $i$ is $w$.
 

@@ -1,4 +1,23 @@
-Graded Problem
+## Practice Problem
+### [DPV] Problem 6.4 – Dictionary lookup
+You are given a string of n characters s[1...n], which you believe to be a corrupted text document in which all punctuation has vanished...
+
+### [DPV] Problem 6.8 – Longest common substring
+Given two strings x = [1...n] and y = [1...m], we wish to find the length of their longest common substrings...
+
+### [DPV] Problem 6.18 – Making change II
+Consider the following variation on the change-making problem (Exercise 6.17): you are given denominations , ...
+
+### [DPV] Problem 6.19 – Making change k
+Given an unlimited supply of coins of denominations , we wish to make change for a value v using at most k coins...
+
+### [DPV] Problem 6.20 – Optimal Binary Search Tree
+Suppose we know the frequency with which keywords occur in programs of a certain language, for instance ...
+
+### [DPV] Problem 6.26 – Alignment
+Sequence alignment. When a new gene is discovered, a standard approach to understanding its function is to look through a database of known genes and find close matches
+
+## Graded Problem
 
 Dr. Brito's son Oliver has entered a fundraising contest at school, with the task of providing custom made ragdolls for charity. Whichever students produces the most ragdolls wins A Major AwardLinks to an external site..
 
