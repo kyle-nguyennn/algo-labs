@@ -109,7 +109,7 @@ out the majority element of A? If so, you can use a divide-and-conquer approach.
 
 #### Part B: Can you give a linear-time algorithm? 
 Hint: Here's another divide-and-conquer approach:
-- Pair up the elements of A arbitrarily, to get n=2 pairs
+- Pair up the elements of A arbitrarily, to get n/2 pairs
 - Look at each pair: if the two elements are different, discard both of them; if they are
 the same, keep just one of them
 
@@ -144,17 +144,47 @@ Part B:
 
 a. The algorithm:
 
+We split the array into n/2 consecutive pairs and perform the following elimination process:
+if they are different, we eliminate both; if they are the same, we add 1 element to the result list. \
+Base case: after the round, if the result list is empty, we return no majority element and end the algorithm; if the result list has only 1 element, that element is the best probable candidate for the majority element, we run a linear scan on the array to check if the count is actually > half the array length. \
+If the result list has more than 1 element, we repeat the process on the result list until the base case is reach.
 
 b. Justifications:
 
+For simplicity, assume n = 2^k. We will prove 2 claims:\
+Claim 1: If an element survive the elimination process, it is not neccessarily the majority element.
+Claim 2: If a majority element exists, it must survive the elimination process.
+
+Claim 1 is easy to prove by provide an example: \
+Consider the array [1,2,3,4,5,5,5,5] which has no majority element. An arbitrary arrangements as follow: (1,2), (3,4), (5,5), (5,5). This would result in 5 being the survivor after the elimination process but we, by definition, know that 5 is not.
+
+Claim 2 proof: when there's a majority element: \
+Consider the weakest majority element c, having the count of n/2+1. The most disadvantageous arrangement for it is to have all other elements conspire against it, i.e, each non-majorirty element pair up with 1 majority element, to eliminate the most of c going through the next round. Since c have n/2+1 instance, there exists 1 pair of c-c, and this ensures at least 1 c going to the next round. Since all other pairs are different, they all get eliminated and c comes out on top as the only winner in this round. \
+Why is this the most disadvantageous arrangement for c? Because it ensures the least number of c going through the round. Any deviation from this arrangement improves the number of instances of c in the next round. Take 2 pairs: c-a and c-b. It's obvious that swapping the partners of these 2 pairs only increase the count of c: c-c (1 c survive) and a-b (both eleminated). The other scenario is having 2 pairs: c-d and c-d. Swapping these 2 pairs increases both the count of c and d in the next round by 1, so they tie; but c already have 1 guaranteed member in the next round from the extra c-c pair, so c always 1-up any other element. \
+Hence the majority element always survive the elimination process.
+
+From these 2 claims, we are guaranteed that the survivor of the elimination process is the only probable candidate for majority element. We need to do a verification step (linear scan) to check if it's actually the majority element by counting its occurence.
+
 c. Complexity:
+
+From the description of the algorithm, we have the recurrence relation: T(n) = T(n/2) + O(n). Using master theorem this solves to O(n).
 
 
 ### Binary search modified* 
 Design an O(log(n)) algorithm to find the smallest missing natural number in a given sorted array of length n. The given array only has distinct natural numbers. For example, the smallest missing natural number from A = [3, 4, 5] is 1, and from A = [1, 3, 4, 6] is 2.
 
 #### Solution
-[TODO]
+a. The algorithm:
+
+We can modify the binary search algorithm as follow: At each iteration, we compare A[mid] with mid. If A[mid] == mid, we know the missing number must be on the right partition, so we recurse the process from mid+1 to right. If A[mid] != mid, we record mid as the result, and continue to recurse on the left partition (from left to mid-1) to possibly improve on mid (smaller mid). The recursion stops when left > right. The recorded result is the minimum number that is missing from the array.
+
+b. Justifications:
+
+Align the elements on the natural number line, we see that a missing number at index i will shift the right portion of the array to the left, resulting in A[j] > j, for j >= i. If i is the first natural number that is missing, we have A[k] = k, for k < i. Hence we can search for the first element from the left that cause this to happen. The binary search process keep improving the resulting index until there's no further improvement, hence produces the smallest index.
+
+c. Complexity:
+Same as binary search, the modification only do 1 comparison per level. Hence the runtime complexity remains O(logn).
+
 
 <small><b>Note:</b> For the practice problems, your solution (which does not need to be turned in) should be in the D&C format: describe your algorithms in words, justify the correctness of the approach, and analyze the run time.</small>
 
