@@ -18,59 +18,67 @@ h. T(n) = T(n-1) + n^c, c >= 1 const \
 i. T(n) = T(n-1) + c^n, c > 1 const \
 j. T(n) = 2T(n-1) + 1 \
 k. T(n) = T(sqrt(n)) + 1
-
 #### Solution
-a. T(n) = 2T(n/3) + 1 \
-        = O(n^log3(2))      
-    Master theorem: d < logb(a) 
 
-b. T(n) = 5T(n/4) + n \
-        = O(n^log4(5))      
-    Master theorem: d < logb(a)
+a.  
+$T(n) = 2T(n/3) + 1$  
+$\phantom{T(n)}\;= O\!\left(n^{\log_{3}(2)}\right)$  
+Master theorem: $d < \log_b(a)$
 
-c. T(n) = 7T(n/7) + n \
-        = O(nlogn)    
-    Master theorem: d = logb(a)
-        
-d. T(n) = 9T(n/3) + n^2
-        = O(n^2 logn)       # d = logb(a)
+b.  
+$T(n) = 5T(n/4) + n$  
+$\phantom{T(n)}\;= O\!\left(n^{\log_{4}(5)}\right)$  
+Master theorem: $d < \log_b(a)$
 
-e. T(n) = 8T(n/2) + n^3
-        = O(n^3 logn)       # d = logb(a)
+c.  
+$T(n) = 7T(n/7) + n$  
+$\phantom{T(n)}\;= O(n\log n)$  
+Master theorem: $d = \log_b(a)$
 
-f. T(n) = 49T(n/25) + n^(3/2)logn
-        = O(n^log5(7))
-    logb(a) = log25(49) = 2/2 * (log5(7)) = 4.89
-    n^(3/2)logn < n^(3/2)n = n^(5/2) => d < 2.5
-    => lob(a) > d => Complexity is dominated by subproblem proliferation at each level
+d.  
+$T(n) = 9T(n/3) + n^2$  
+$\phantom{T(n)}\;= O(n^2 \log n)$  \# $d = \log_b(a)$
 
-g. T(n) = T(n-1) + 2
-        = T(n-2) + 2 + 2 = T(n-2) 2*2
-        = T(n-k) + 2*k
-        = 2*n
-        = O(n)
+e.  
+$T(n) = 8T(n/2) + n^3$  
+$\phantom{T(n)}\;= O(n^3 \log n)$  \# $d = \log_b(a)$
 
-h. T(n) = T(n-1) + n^c, c >= 1 const
-        = T(n-2) + n^c + (n-1)^c
-        = sum((n-k)^c), k=0..n-1
-        = sum(k^c), k=1..n
-        = O(n^c)
+f.  
+$T(n) = 49T(n/25) + n^{3/2}\log n$  
+$\phantom{T(n)}\;= O\!\left(n^{3/2}\log n \right)$  
 
-i. T(n) = T(n-1) + c^n, c > 1 const
-        = T(n-2) + c^n + c^(n-1)
-        = sum(c^k), k=1..n
-        = O(c^n)
+Explanation:
 
-j. T(n) = 2T(n-1) + 1
-        = 2(2T(n-2) + 1) + 1
-        = 2*2T(n-2) + 1*2^0 + 1*2^1
-        = 2^kT(n-k) + sum(2^i), i=0..k-1
-        = 2^n + sum(2^i), i=0..n-1
-        = O(2^n)
+$\log_b(a) = \log_{25}(49) = \log_{5}{7} \approx 1.218$  
+$n^{3/2}\log n > n^{3/2} = n^d$  
+$\Rightarrow d = 1.5 > \log_b(a)$  
+Hence the term $n^{3/2}\log n$ dominates.
+$\Rightarrow T(n) = \Theta\!\left(n^{3/2}\log n\right)$
 
-k. T(n) = T(sqrt(n)) + 1
-        = T(sqrt(sqrt(n))) + 1 + 1
-        = log logn          # The number of time to floor sqrt a number n until it reaches 1 is log(log(n))
+g.  
+$T(n) = T(n-1) + 2$  
+$\phantom{T(n)}\;= T(n-k) + 2k$  
+$\phantom{T(n)}\;= O(n)$
+
+h.  
+$T(n) = T(n-1) + n^c,\;\; c\ge 1$ (constant)  
+$\phantom{T(n)}\;= \sum_{k=1}^{n} k^c$  
+$\phantom{T(n)}\;= \Theta(n^{c+1})$
+
+i.  
+$T(n) = T(n-1) + c^n,\;\; c>1$ (constant)  
+$\phantom{T(n)}\;= \sum_{k=1}^{n} c^k$  
+$\phantom{T(n)}\;= \Theta(c^n)$
+
+j.  
+$T(n) = 2T(n-1) + 1$  
+$\phantom{T(n)}\;= 2^k T(n-k) + \sum_{i=0}^{k-1} 2^i$  
+$\phantom{T(n)}\;= \Theta(2^n)$
+
+k.  
+$T(n) = T(\sqrt{n}) + 1$  
+$\phantom{T(n)}\;= T\!\left(n^{1/2^t}\right) + t$  
+$\phantom{T(n)}\;= \Theta(\log\log n)$
 
 
 ### [DPV] Problem 2.16 (infinite array)
@@ -201,3 +209,64 @@ $$
 That is, the profit is the difference between the revenue at the end of the campaign and the revenue at the start, minus the operating costs incurred while the campaign was running.
 
 Design a divide and conquer algorithm to find indices i and j that maximize the profit.
+
+### Solution
+
+a. The algorithm:
+
+Assume R[0] = 0. \
+Let TC be the prefix of the cost, that is the total cost to run the compaign through day i.
+$$
+    TC[i] = \sum_{k=1}^{i}C[k] 
+$$
+Define TC[0]=0, we can rewrite the profit formula as
+$$
+\begin{aligned}
+profit(i,j)
+    &= (R[j] - R[i-1]) - (TC[j] - TC[i-1]) \\
+    &= (R[j] - TC[j]) - (R[i-1] - TC[i-1])
+\end{aligned}
+$$
+Define P as the running profit, that is the difference between the running revenue R and the the running cost TC: $P[i] = R[i] - TC[i]$
+The profit again can be rewritten as: 
+$$
+profit(i,j) = P[j] - P[i-1]
+$$
+
+Now define the recursive function max_profit(L, R) that returns the following:
+
+- index i and j that maximize the profit in the closed interval [L,R]
+- the max_profit value in the closed interval [L,R]
+- the max prefix index, called max_prefix_idx, that maximize profit(L, max_prefix_idx)
+- the max prefix profit, called max_prefix, that is the max profit in the closed interval [L, max_prefix_idx]
+- the max suffix index, called max_suffix_idx, that maximize profit(max_suffix_idx, R)
+- the max suffix profit, called max_suffix, that is the max profit in the closed interval [max_suffix_idx, R]
+
+The function performs these steps:
+
+- Base case: when L=R, the interval only contain 1 element, hence:
+
+    - i = j = max_prefix_idx = max_suffix_idx = L
+    - max_prefix = max_suffix = max_profit = P[R] - P[R-1]
+
+- Split the interval to 2 halves: mid = (L+R)/2
+- Recursively call the max_profit on [L, mid] to get i_L, j_L, max_profit_L, max_prefix_idx_L, max_prefix_L, max_suffix_idx_L, max_suffix_L
+- Recursively call the max_profit on [mid+1, R] to get i_R, j_R, max_profit_R, max_prefix_idx_R, max_prefix_R, max_suffix_idx_R, max_suffix_R
+- Calculate the max profit that starts on the left parititon and ends on the right partition, called max_profit_cross. The max_profit_cross must be the max suffix from the left partition combined with the max prefix from the right, i.e., max_profit_cross = max_suffix_L + max_prefix_R.
+- The max_profit of the interval [L,R] is the max of the 3 possibilities above, i.e., max(max_profit_L, max_profit_R, max_profit_cross). The index i,j can be extracted according to where the max_profit originates from: if max_profit is max_profit_L, (i,j) = (i_L, j_L); if max_profit is max_profit_R, (i,j) = (i_R, j_R); if max_profit is from max_profit_cross, (i,j) = (max_suffix_idx_L, max_prefix_idx_R).
+- We need to also do the maintenance steps to return the extra information regarding the prefix and suffix to the upper recursive level:
+
+    - max_prefix = max(max_prefix_L, (P[mid] - P[L-1]) + max_prefix_R)
+    - max_prefix_idx = the max_prefix_idx of the above winner partition
+    - max_suffix = max(max_suffix_R, (P[R] - P[mid-1]) + max_suffix_L)
+    - max_suffix_idx = the max_suffix_idx of the above winner partition
+
+b. Justifications:
+
+Because profit is additive, meaning $profit(L, R) = profit(L, k) + profit(k+1, R)$, for $L <= k <= R$, we can rely on this property to split the array and calculate the max profit on each smaller half and combine the result. When the true max profit range lies completely on the left or right, is is trivial to conclude the overall max profit must come from the greater of the two. The only non-trivial case is when the true max profit range can cross the mid point, that is $i <= mid < j$. In this case, $[i, mid]$ must be the max suffix of the left partition and $[mid+1, j]$ must be the max prefix of the right parititon. This comes from the distributivity of the max function over addition over 2 sets: $max(A+B) = max(A) + max(B)$, in our case A and B are 2 discrete intervals that intersect at the boundary.
+
+
+c. Complexity:
+
+The above algorithm gives the recurrence relation: T(n) = 2T(n/2) + O(1), because the work to combine on the top level only takes constant time to update the extra information max_profit, max_prefix, max_suffix. This solves to T(n) = O(n), by master theorem.
+
