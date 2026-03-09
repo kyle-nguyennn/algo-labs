@@ -24,20 +24,23 @@ Your input is a weighted graph G=(V,E), with weights w(e)>0. You are also given 
 ### Solution
 
 a. The algorithm:
-We use a modified version of Djikstra algorithm to solve this problem.
-Modifications: dist will store the minimum weight of the optimal path from starting index to the indexed vertex, for all vertices of the graph. Initialize dist to be -1 for all vertices, except dist of starting vertex s to be w(s).
+We first negate all edge weights in G, creating a new weight list w'(e) = -w(e) for every edge. Then we run Kruskal's algorithm on G with the negated weights w'. Since Kruskal's finds the minimum spanning tree, using negated weights gives us a maximum spanning tree T of the original weights.
 
-Use a max-heap to main the vertex with the largest minimum weight on the path from the starting vertex. 
-
-For a vertex u at the top of the max-heap: we update dist(v) := min(dist(u), w(v)) if dist(v) < min(dist(u), w(v)), for all v that are connected to u. We keep track of prev(v) = u, if the optimality update occurs for v.
-
-We stop the process when t is at the top of the queue or the queue is empty. The output of the problem is dist(t).
+Now we run DFS on T starting from vertex s. From the DFS output, we use prev[] to trace the path from t back to s: starting at t, we follow prev(t) to its parent, then prev of that parent, and so on until we reach s. We reverse this sequence to get the path from s to t. Return this path.
 
 b. Justification of Correctness:
-The modified version finds the path with maximum distance in the graph. The distance here is calculated as the minimum weight along the path, which is abstracted from the djikstra algorithm, since Djikstra can be used to find the minimum of an arbitrary score calculated along a path, as long as the score are non-negative.
+Negating the weights and running Kruskal's gives us a maximum spanning tree T, because minimizing the sum of negated weights is the same as maximizing the sum of original weights. Since T is a tree, there is exactly one path between any two vertices, including s and t.
 
-The optimality update happens if it increase the score (dist) of the path. This can't keep increasing the dist forever because of the contraint of the way score is calculated: min(dist(u), w(v)). Even if we add more vertex to the existing path, the score can only stays the same or go down, hence nodes in the same cycle won't be repeated as it does not improve the optimal score.
+We claim the path from s to t in T maximizes the minimum edge weight. Suppose P is the path from s to t in T, and the edge with minimum weight (the bottleneck) in P is e*. Now if we remove e* from T, it splits T into 2 connected components A and B, with s in A and t in B. Assume there exists some other path P' from s to t where every edge has weight strictly greater than edge e*.
 
+This path P' must have an edge f that crosses the cut A,B and w(f) > w(e*) since all edges in P' is strictly greater than e*. Then if we add f to T-{e*}, we form a spanning tree with total weights larger than original T. This leads to a contradiction because we define T to be the maximum spanning tree. So no better path exists, and the path P is optimal.
+
+DFS on the tree T produces prev[], which we use to reconstruct the unique path from s to t.
 
 c. Runtime analysis:
-Calculation of the score takes O(1). Operations on max-heap is the same as operations on min-heap. Hence the run time of the modifed version above is the same as the original Djikstra algorithm: O((n+m) log n).
+- Negating all edge weights takes O(m) since we go through every edge once. 
+- Running Kruskal's on G takes O(m log n). 
+- The tree T has n-1 edges, so DFS on T takes O(n + (n-1)) = O(n). 
+- Reconstructing the path from prev[] takes at most O(n) since the path can visit at most n vertices.
+
+Overall runtime: O(m log n).
