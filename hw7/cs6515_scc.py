@@ -29,24 +29,20 @@ def DFS(G: DiGraph, s: Node = None) -> DFSOutput:
         nonlocal post_n
         nonlocal cc
         ccnum[node] = cc
+        pre[node] = pre_n
+        pre_n += 1
         neighbors = sorted(list(G[node]))
         for v in neighbors:
             if pre[v] == -1:
-                pre[v] = pre_n
-                pre_n += 1
                 prev[v] = node
                 explore(v)
-                post[v] = post_n
-                post_n += 1
+        post[node] = post_n
+        post_n += 1
 
     for node in nodes:
         if pre[node] == -1: # not explored yet
             cc += 1 # new connected component
-            pre[node] = pre_n
-            pre_n += 1
             explore(node)
-            post[node] = post_n
-            post_n += 1
     
     return DFSOutput(ccnum, prev, pre, post)
 
