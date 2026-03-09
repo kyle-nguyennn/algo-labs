@@ -1,101 +1,86 @@
 ## Graph Theory Guidance #483
 
 ### Context
-A graph theory problem is a form of reduction. You are given some problem to solve, and the challenge is to solve that problem by using one of the graph algorithms we study this semester. In other words, you reduce your problem to a graph problem such that a known algorithm can solve it for you. 
 
-The known algorithms (#484) are treated as a black-box - you are not allowed to change / modify them in any way. You can (and often will) modify the original problem input in some way or create a graph which represents the input - this becomes the input to the black-box. You then use the outputs from the black-box (possibly with modification) to output a solution to the original problem. 
+A graph theory problem is a form of **reduction**. You are given some problem to solve, and the challenge is to solve it by using one of the graph algorithms we study this semester. In other words, you reduce your problem to a graph problem such that a known algorithm can solve it for you.
+
+The known algorithms (#484) are treated as a **black-box** — you are not allowed to change or modify them in any way. You can (and often will) modify the original problem input in some way or create a graph which represents the input — this becomes the input to the black-box. You then use the outputs from the black-box (possibly with modification) to output a solution to the original problem.
 
 ### Rules
-NO PSEUDOCODE - YOU WILL LOSE A LOT OF POINTS
 
-You may only use known black box algorithms (#484).
+> **NO PSEUDOCODE — YOU WILL LOSE A LOT OF POINTS**
 
-You must use one or more black box algorithms (#484) to solve problems.
-
-You must not modify any black box algorithms (#484).
-
-Re-creating a black box with modifications is the same thing.
-
-All graphs are in adjacency list format (see below)
-
-You can assume you always have n and m for purposes of runtime analysis, where n represents the number of vertices |V| and m represents the number of edges |E|.
-
-#484 isn't exactly relevant here, but it's worth another link.
-
-See #7 for common course runtimes, including operations performed to graphs.
+- You may **only** use known black box algorithms (#484).
+- You **must** use one or more black box algorithms (#484) to solve problems.
+- You **must not** modify any black box algorithms (#484). Re-creating a black box with modifications counts as a modification.
+- All graphs are in adjacency list format (see [Graph Representation](#graph-representation) below).
+- You can assume you always have **n** and **m** for runtime analysis, where **n = |V|** (vertices) and **m = |E|** (edges).
+- See #7 for common course runtimes, including operations performed on graphs.
 
 ### Required Parts of a Graph Theory Solution
 
+Every graph theory solution must include the following three parts:
+
 #### (a) Algorithm
 
-- Describe "how" to solve the problem in words (narrative/paragraph form)
-    - Bulleted steps are fine, but pseudocode/code is not allowed
-        - "Pseudocode" includes line-by-line restatement of code as words. 
-        - If you find yourself using a lot of nested bullets, you might be erring on the side of line-by-line conversion of code into words, which is not a narrative.
+Describe **how** to solve the problem in words (narrative/paragraph form).
 
-- Describe what modifications are performed to the input, if any
-- Detail the black box algorithm(s) being used
-    - What is passed in as input
-    - What is being used from its output
-
-- Describe what modifications are performed to the output, if any
-- Repeat as needed for any other black boxes
-- Detail the final return for the problem's solution
+- Bulleted steps are fine, but pseudocode/code is **not allowed**.
+    - "Pseudocode" includes line-by-line restatement of code as words.
+    - If you find yourself using a lot of nested bullets, you're likely writing pseudocode in disguise.
+- Describe what modifications are performed to the input, if any.
+- Detail the black box algorithm(s) being used:
+    - What is passed in as input.
+    - What is being used from its output.
+- Describe what modifications are performed to the output, if any.
+- Repeat as needed for any other black boxes.
+- Detail the final return for the problem's solution.
 
 #### (b) Justification of Correctness
 
-- Describe "why" your algorithm solves the problem, in words (narrative). 
-    - This is not a formal inductive proof; informal justification is ok.
+Describe **why** your algorithm solves the problem, in words (narrative).
 
-- Explain how your problem is solved by the black boxes used
-
-- Explain how changing the inputs and/or outputs gets what you want
+- This is **not** a formal inductive proof; informal justification is fine.
+- Explain how your problem is solved by the black boxes used.
+- Explain how changing the inputs and/or outputs gets what you want.
 
 #### (c) Runtime Analysis
 
-- Analyze all steps of the algorithm in Big-O notation.
-    - Always, always in this course - worst case Big-O.
-    - Can explain/analyze in words and assert known black-box runtimes without further justification. 
-    - Must include run time analysis for any pre/post processing
-        - See #7 for common runtimes when dealing with graphs.
+Analyze all steps of the algorithm in **worst-case Big-O** notation.
 
-- Provide an overall final runtime in (you guessed it) Big-O notation, fully simplified.
-
-- If the problem specifies a target runtime, you must meet that for full credit. If we do not specify a runtime, faster (and correct) in Big O notation are worth more credit.
-
-- While we work with worse-case runtimes, we also work with tightest-bound runtimes. 
-    - That is, even though the worst case for an O(n+m) operation occurs when m= n^2, it is incorrect to state O(n^2) for such an operation unless we know something about the graph (e.g., it is a clique). O(n+m) is the tightest worse-case bound on such an operation
-    - Similarly, if we know the graph is a tree, then m = n-1 and O(n+m) operations collapse to O(n).
-
-- When conveying the well-known runtimes of usable black boxes, you are not required to simplify it, even if the graph's constraints would allow for it.
+- You can assert known black-box runtimes without further justification.
+- Must include runtime analysis for any pre/post processing (see #7 for common graph runtimes).
+- Provide an overall final runtime in Big-O, **fully simplified**.
+- If the problem specifies a target runtime, you must meet it for full credit. Otherwise, faster (and correct) solutions earn more credit.
+- Use **tightest-bound** worst-case runtimes:
+    - Even though the worst case for an O(n+m) operation occurs when m = n², it is incorrect to state O(n²) unless we know something about the graph (e.g., it is a clique). O(n+m) is the tightest bound.
+    - If the graph is a tree, then m = n−1, and O(n+m) collapses to O(n).
+- When stating runtimes of black boxes, you are **not required** to simplify, even if the graph's constraints would allow it.
 
 ### Graph Representation
 
 Graphs in this class, unless stated otherwise:
 
-- Are simple graphs (no multi-edges or self-loops)
-
-- Are always given in adjacency list format (see DPV 3.1.1)
-    - An array of vertices that are pointers to linked lists of adjacent vertices, such that each element in the list represents an edge to another vertex.
-    - Vertices are assumed to be labeled in such a way where they can be found by indexing into the array.
-
+- Are **simple graphs** (no multi-edges or self-loops)
+- Are always given in **adjacency list format** (see DPV 3.1.1)
+    - An array of vertices → linked lists of adjacent vertices, where each list element represents an edge.
+    - Vertices are labeled such that they can be found by indexing into the array.
 - Can be connected or disconnected, undirected or directed, sparse or dense
-    - If unstated by the problem, you should assume any of these could be true
+    - If unstated by the problem, assume **any** of these could be true.
+- Are **connected and undirected** when working with MSTs.
+- Are **connected and directed** when working with flow networks.
 
-- Are connected and undirected when working with MSTs
+#### Common Graph Operations
 
-- Are connected and directed when working with flow networks
+The following actions can be described without going into implementation details. Each is assumed to be an **O(n + m)** operation:
 
-When working with graphs, there are a number of common actions that can be presented without needing to go into details. Some examples as follows:
-
-- Reversing a graph: "Reverse the edges in the graph".
-- Copying a graph: "Create a copy of G and call it GCopy".
-- Creating subgraphs:
-    - "Create a copy of G called GEven that only keeps edges with even numbered weights".
-    - "Create a copy of G called GK that only keeps vertices with a degree > k".
-    - "Create a residual graph of G called Grs that uses the flows from our run of EK".
-
-Unless the task can't possibly be completed in this runtime, each of these are assumed to be O(n + m) operations.
+| Operation | Example phrasing |
+|---|---|
+| Reversing a graph | "Reverse the edges in the graph" |
+| Copying a graph | "Create a copy of G and call it G_copy" |
+| Creating subgraphs | "Create a copy of G called G_even that only keeps edges with even weights" |
+| | "Create a copy of G called G_k that only keeps vertices with degree > k" |
+| | "Create a residual graph of G called G_rs using the flows from our run of EK" |
 
 ## Usable Black Boxes for Graphs #484
 
