@@ -24,6 +24,8 @@ def DFS(G: DiGraph, s: Node = None) -> DFSOutput:
     pre_n = post_n = 0
 
     def explore(node):
+        nonlocal pre_n
+        nonlocal post_n
         neighbors = sorted(list(G[node]))
         for v in neighbors:
             if pre[v] == -1:
@@ -59,10 +61,11 @@ def SCC(G: DiGraph) -> SCCOutput:
 
     meta_g = DiGraph()
     scc = {node: -1 for node in nodes}
-    for node, _ in sorted_post:
+    for node in sorted_post:
         if scc[node] == -1: # not explored, representative of this scc
             meta_g.add_node(node)
             sub_dfs_output = DFS(G, node)
             for sub_node, _ in sub_dfs_output.ccnum.items():
                 scc[sub_node] = node
 
+    return SCCOutput(dfs_output, meta_g)
