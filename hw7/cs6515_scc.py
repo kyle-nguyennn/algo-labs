@@ -59,6 +59,8 @@ def SCC(G: DiGraph) -> SCCOutput:
     for node, post_order in dfs_reversed.post.items():
         sorted_post[post_order] = node
     sorted_post.reverse() # largest post-order number first
+    # print(f"reversed post order: {dfs_reversed.post}")
+    # print(f"sorted post: {sorted_post}")
     ordered_g = DiGraph()
     ordered_g.add_nodes(sorted_post)
     ordered_g.add_edges(G.edges())
