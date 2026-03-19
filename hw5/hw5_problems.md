@@ -1,10 +1,28 @@
 ## Practice Problems
 
 ### [DPV] Problem 3.3 (Topological ordering example)
-[Problem statements]
-#### Solution
-[TODO]:
+Given graph the below graph. Perform DFS with pre and post order number. Whenever there's a need to select what vertex to explore, choose in alphabetical order.
+A --> C ---> D --> F ---> G
+      ^  |         ^  |    
+      |  |         |  |    
+B -----  --> E -----  --> H
+a. Whats the pre and post order number?
+b. What are the sources and sinks of the graph?
+c. What is the topological ordering found by the algorithm?
+d. How many topological ordering are there in this graph?
 
+#### Solution
+a. 
+A (1,14) --> C (2,13) ---> D (3,10) --> F (4,9) ---> G (5,6)
+             ^         |                ^        |    
+             |         |                |        |    
+B (15,16) ----         --> E (11,12) ----        --> H (7,8)
+
+b. Sources: A, B. Sinks: G, H.
+
+c. Sorted by post-order number decreasing: B, A, C, E, D, F, H, G.
+
+d. 8 valid topological orderings. Since (A,B), (D,E), (G,H) can interchange their internal positions -> 2^3 options.
 
 ### [DPV] Problem 3.4 (SCC algorithm example)
 [Problem statements]
