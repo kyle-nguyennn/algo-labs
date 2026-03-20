@@ -25,7 +25,16 @@ c. Sorted by post-order number decreasing: B, A, C, E, D, F, H, G.
 d. 8 valid topological orderings. Since (A,B), (D,E), (G,H) can interchange their internal positions -> 2^3 options.
 
 ### [DPV] Problem 3.4 (SCC algorithm example)
-[Problem statements]
+Run SSC for each of the below graph following alphabetical order, answer the following questions:
+a. In what order are SCCs found?
+b. What are the source and sink SCCs?
+c. Draw the meta-graph of SCCs.
+d. What is the minimum number of edges to make it strongly connected?
+
+![Graph (i)](graph_i.jpg)
+
+![Graph (ii)](graph_ii.jpg)
+
 #### Solution
 
 
