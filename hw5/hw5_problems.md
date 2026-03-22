@@ -77,7 +77,7 @@ Sinks: {C, D, F, J}
 
 c. Meta graph:
 
-d. 3 edges: (G,E), (E,B), (C,A)
+d. 2 edges: (E,B), (C,E) ## NOTE: n_e extra = max(sources, sinks)
 ```
 ##### Graph (ii)
 
@@ -147,16 +147,14 @@ b. The weaker claim means that the townhall belongs to 1 strongly connected comp
 
 This can be checked using the below algorithm:
 Let vertex s represent the townhall.
-Run SCC algorithm on G and identify the strongly connected component containing s.
 Run DFS on G starting from s to discover all intersections reachable from s. Call this set from_s.
-Construct graph G_R=(V,E_R) as the reversed graph of G. Run DFS on G_R_s starting from to discover all intersections that can reach s. Call this set to_s.
-If from_s and to_s containst the same elements as the SCC of s, we proved the claim.
+Construct graph G_R=(V,E_R) as the reversed graph of G. Run DFS on G_R starting from to discover all intersections that can reach s. Call this set to_s.
+If from_s is a subset of to_s, we proved the claim.
 
 Justification of correctness:
-DFS on G starting from s gives all the intersections reachable from s. DFS on G_R starting from s gives all the intersections that can reach s. If the 2 sets equal and contains all the elements in the SCC of s, it means all nodes in the SCC of s are reachable from s and can reach s.
+DFS on G starting from s gives all the intersections reachable from s. DFS on G_R starting from s gives all the intersections that can reach s. from_s being a subset of to_s means that all intersections reachable from s can also reach s. Hence, it is equivalent to the claim.
 
 Runtime complexity:
-SCC: O(n+m)
 DFS: O(n+m)
 Hence the algorithm has O(n+m) compelexity.
 
