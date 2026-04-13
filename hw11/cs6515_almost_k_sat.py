@@ -1,4 +1,5 @@
 from npc.types import CNF, Assignment, Clause
+import logging
 
 def _evaluate_assignment(variables: Assignment) -> dict[str, bool]:
     values = {}
@@ -20,13 +21,30 @@ def _evaluate_clause(clause: Clause, values: dict[str, bool]) -> bool:
         if res == True: return True
     return res
 
+def _get_variables(cnf: CNF) -> set[str]:
+    variables = set()
+    for clause in cnf:
+        for v in clause:
+            if v.startswith('!'):
+                variables.add(v[1:])
+            else:
+                variables.add(v)
+    return variables
+
 def verify_solution(cnf: CNF, variables: Assignment, K: int) -> bool:
     cnt = 0
-    # print(f"Verifying assignment: {variables}")
+    # logging.info(f"Verifying assignment: {variables}")
+    vars = _get_variables(cnf)
     values = _evaluate_assignment(variables)
+    if len(values) != len(variables):
+        # logging("Invalid assignment: duplicate variables with different values")
+        return False
+    if set(values.keys()) != vars:
+        # logging.warning("Invalid assignment: missing variables")
+        return False
     for clause in cnf:
         if not (val := _evaluate_clause(clause, values)):
-            # print(f"{clause} is unsatisfied")
+            # logging.info(f"{clause} is unsatisfied")
             cnt += 1
             if cnt > K: return False
     return cnt == K
@@ -34,9 +52,12 @@ def verify_solution(cnf: CNF, variables: Assignment, K: int) -> bool:
 
 def input_transformation(cnf: CNF) -> tuple[CNF, int]:
     # SAT input to k-SAT input transformation
-    return cnf, 0
+    literal1 = 'AUX'
+    literal2 = '!AUX'
+    out = [*cnf, {literal1}, {literal2}]
+    return out, 1
 
 
 def output_transformation(variables: Assignment | None) -> Assignment | None:
     # k-SAT output to SAT output transformation
-    return variables
+    return variables.difference({'AUX', '!AUX'}) if variables is not None else None
