@@ -1,52 +1,32 @@
 from npc.types import CNF, Assignment, Clause
-import logging
 
-def _evaluate_assignment(variables: Assignment) -> dict[str, bool]:
-    values = {}
-    for v in variables:
-        if v.startswith('!'):
-            values[v[1:]] = False
-        else:
-            values[v] = True
-    return values
-
-def _evaluate_clause(clause: Clause, values: dict[str, bool]) -> bool:
-    res = False
-    for v in clause:
-        if v.startswith('!'):
-            val = not values[v[1:]]
-        else:
-            val = values[v]
-        res = res or val
-        if res == True: return True
-    return res
-
-def _get_variables(cnf: CNF) -> set[str]:
-    variables = set()
-    for clause in cnf:
-        for v in clause:
-            if v.startswith('!'):
-                variables.add(v[1:])
-            else:
-                variables.add(v)
-    return variables
 
 def verify_solution(cnf: CNF, variables: Assignment, K: int) -> bool:
-    cnt = 0
-    # logging.info(f"Verifying assignment: {variables}")
-    vars = _get_variables(cnf)
-    values = _evaluate_assignment(variables)
-    if len(values) != len(variables):
-        # logging("Invalid assignment: duplicate variables with different values")
-        return False
-    if set(values.keys()) != vars:
-        # logging.warning("Invalid assignment: missing variables")
-        return False
+    # Validate: no conflicting assignments (e.g. both 'x1' and '!x1')
+    var_names = set()
+    for v in variables:
+        name = v[1:] if v[0] == '!' else v
+        if name in var_names:
+            return False
+        var_names.add(name)
+
+    # Check assignment covers exactly the variables in the CNF
+    cnf_vars = set()
     for clause in cnf:
-        if not (val := _evaluate_clause(clause, values)):
-            # logging.info(f"{clause} is unsatisfied")
+        for lit in clause:
+            cnf_vars.add(lit[1:] if lit[0] == '!' else lit)
+    if var_names != cnf_vars:
+        return False
+
+    # Count unsatisfied clauses using fast C-level set operation.
+    # A clause is satisfied iff it shares a literal with the assignment.
+    # isdisjoint() == True means no shared literals → clause is unsatisfied
+    cnt = 0
+    for clause in cnf:
+        if clause.isdisjoint(variables):
             cnt += 1
-            if cnt > K: return False
+            if cnt > K:
+                return False
     return cnt == K
 
 
