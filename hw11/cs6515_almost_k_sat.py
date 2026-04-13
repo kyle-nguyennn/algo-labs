@@ -33,8 +33,10 @@ def verify_solution(cnf: CNF, variables: Assignment, K: int) -> bool:
 
 
 def input_transformation(cnf: CNF) -> tuple[CNF, int]:
-    pass
+    # SAT input to k-SAT input transformation
+    return cnf, 0
 
 
 def output_transformation(variables: Assignment | None) -> Assignment | None:
-    pass
+    # k-SAT output to SAT output transformation
+    return variables
