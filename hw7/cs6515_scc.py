@@ -66,8 +66,8 @@ def SCC(G: DiGraph) -> SCCOutput:
     ordered_g.add_edges(G.edges())
 
     dfs_output = DFS(ordered_g)
-    # print(f"Connected components: {dfs_output.ccnum}")
-    # print(f"Prev: {dfs_output.prev}")
+    print(f"Connected components: {dfs_output.ccnum}")
+    print(f"Prev: {dfs_output.prev}")
 
     # construct meta graph
     cc = [list() for _ in range(max(dfs_output.ccnum.values()) + 1)]

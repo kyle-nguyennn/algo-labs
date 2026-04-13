@@ -13,11 +13,18 @@ def binary_search(a, e):
             r = mid
     return l
 
+def bubble_sort(a):
+    n = len(a)
+    for i in range(n):
+        for j in range(i+1, n):
+            if a[i] > a[j]:
+                swap(a, i, j)
+    return a
+
 def KthQuantiles(S: list[int], k: int) -> list[int]:
     # −1, 2, 4, 1, 3, 0, 18, −3
     # -3, -1, 0, 1, 2, 3, 4, 18
     # k = 4: -1 1 3
-    # S = sorted(S)
     n = len(S)
     if k==1 or n<k: return []
     p = n//k
@@ -25,7 +32,7 @@ def KthQuantiles(S: list[int], k: int) -> list[int]:
     pivots = list(range(p-1, n-1, p))
     # estimate median
     if n <= 4:
-        S = sorted(S)
+        S = bubble_sort(S)
         return [S[i] for i in pivots] # left median
 
     p = n//4
@@ -36,7 +43,7 @@ def KthQuantiles(S: list[int], k: int) -> list[int]:
             medians.append(chunk[0])
         else:
             medians.append(KthQuantiles(chunk, 2)[0])
-    medians = sorted(medians)
+    medians = bubble_sort(medians)
     pivot = medians[1]
     ### estimate median end
     # TODO: to be optimized by swapping
