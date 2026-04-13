@@ -15,6 +15,8 @@
 [Problem statements]
 #### Solution
 
+---
+<div style="page-break-before: always;"></div>
 
 ## Graded Problem
 
@@ -33,7 +35,7 @@ Negating the weights and running Kruskal's gives us a maximum spanning tree T, b
 
 We claim the path from s to t in T maximizes the minimum edge weight. Suppose P is the path from s to t in T, and the edge with minimum weight (the bottleneck) in P is e*. Now if we remove e* from T, it splits T into 2 connected components A and B, with s in A and t in B. Assume there exists some other path P' from s to t where every edge has weight strictly greater than edge e*.
 
-This path P' must have an edge f that crosses the cut A,B and w(f) > w(e*) since all edges in P' is strictly greater than e*. Then if we add f to T-{e*}, we form a spanning tree with total weights larger than original T. This leads to a contradiction because we define T to be the maximum spanning tree. So no better path exists, and the path P is optimal.
+This path P' must have an edge f that crosses the cut A,B and w(f) > w(e*) since all edges in P' are strictly greater than e*. Then if we add f to T-{e*}, we form a spanning tree with total weights larger than original T. This leads to a contradiction because we define T to be the maximum spanning tree. So no better path exists, and the path P is optimal.
 
 DFS on the tree T produces prev[], which we use to reconstruct the unique path from s to t.
 

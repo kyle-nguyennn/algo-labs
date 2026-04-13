@@ -2,7 +2,21 @@ from typing import NamedTuple
 
 from graph.digraph import DiGraph, Node
 
-
+"""
+Build-A-Box: Strongly Connected Components
+To make the ideas presented in the lectures more concrete, your task is to implement the Depth First Search
+(DFS)-based Strongly Connected Components (SCC) algorithm.
+To ensure the implementation matches the algorithm presented in the course, both DFS and SCC functions
+may be independently tested to ensure completeness and correctness.
+Your input will come in the form of a directed graph in adjacency list format. The interface available for
+interacting with the adjacency list is provided as source code.
+Notes:
+    - While edges are stored unordered, your DFS implementation must process them deterministically in
+the same fashion as the lectures present.
+    - Named Tuples have been provided to help manage the multiple outputs of these algorithms. Their
+definitions must not be modified.
+Provide your code for implementing this algorithm in cs6515_scc.py
+"""
 class DFSOutput(NamedTuple):
     ccnum: dict[Node, int]
     prev: dict[Node, Node | None]
@@ -15,65 +29,69 @@ class SCCOutput(NamedTuple):
     metagraph: DiGraph
 
 
-def DFS(G: DiGraph, s: Node = None) -> DFSOutput:
-    nodes = G.nodes()
+def _dfs_internal(G: DiGraph, node_order: list[Node]) -> DFSOutput:
     cc = 0
-    ccnum = {node: -1 for node in nodes}
-    prev = {node: None for node in nodes}
-    pre = {node: -1 for node in nodes}
-    post = {node: -1 for node in nodes}
-    pre_n = post_n = 0
+    ccnum = {node: -1 for node in node_order}
+    prev = {node: None for node in node_order}
+    pre = {node: -1 for node in node_order}
+    post = {node: -1 for node in node_order}
+    clock = 1
 
-    def explore(node):
-        nonlocal pre_n
-        nonlocal post_n
-        nonlocal cc
-        ccnum[node] = cc
-        pre[node] = pre_n
-        pre_n += 1
-        neighbors = sorted(list(G[node]))
-        for v in neighbors:
-            if pre[v] == -1:
-                prev[v] = node
-                explore(v)
-        post[node] = post_n
-        post_n += 1
+    for node in node_order:
+        if pre[node] == -1:  # not explored yet
+            cc += 1  # new connected component
+            ccnum[node] = cc
+            pre[node] = clock
+            clock += 1
+            stack = [(node, iter(sorted(G[node])))]
+            while stack:
+                v, neighbors = stack[-1]
+                try:
+                    w = next(neighbors)
+                    if pre[w] == -1:
+                        prev[w] = v
+                        ccnum[w] = cc
+                        pre[w] = clock
+                        clock += 1
+                        stack.append((w, iter(sorted(G[w]))))
+                except StopIteration:
+                    stack.pop()
+                    post[v] = clock
+                    clock += 1
 
-    for node in nodes:
-        if pre[node] == -1: # not explored yet
-            cc += 1 # new connected component
-            explore(node)
-    
     return DFSOutput(ccnum, prev, pre, post)
+
+
+def DFS(G: DiGraph, s: Node = None) -> DFSOutput:
+    nodes = sorted(G.nodes())
+
+    # If a start node is specified, process it first
+    if s is not None:
+        nodes = [s] + [n for n in nodes if n != s]
+
+    return _dfs_internal(G, nodes)
 
 
 def SCC(G: DiGraph) -> SCCOutput:
     nodes = G.nodes()
     n = len(nodes)
-    reversed = G.reverse()
-    dfs_reversed = DFS(reversed)
-    # largest  post-order number -> source
-    # source in revsered -> sink in original graph
-    # O(n) sort of post. Since we know the post-order number is in range 0 -> n-1
-    sorted_post = [None] * n
-    for node, post_order in dfs_reversed.post.items():
-        sorted_post[post_order] = node
-    sorted_post.reverse() # largest post-order number first
-    # print(f"reversed post order: {dfs_reversed.post}")
-    # print(f"sorted post: {sorted_post}")
-    ordered_g = DiGraph()
-    ordered_g.add_nodes(sorted_post)
-    ordered_g.add_edges(G.edges())
 
-    dfs_output = DFS(ordered_g)
-    print(f"Connected components: {dfs_output.ccnum}")
-    print(f"Prev: {dfs_output.prev}")
+    if n == 0:
+        empty_dfs = DFSOutput({}, {}, {}, {})
+        return SCCOutput(empty_dfs, DiGraph())
+
+    reversed_g = G.reverse()
+    dfs_reversed = DFS(reversed_g)
+    # Sort nodes by decreasing post-order number from DFS on reversed graph
+    sorted_post = sorted(nodes, key=lambda v: dfs_reversed.post[v], reverse=True)
+
+    dfs_output = _dfs_internal(G, sorted_post)
 
     # construct meta graph
-    cc = [list() for _ in range(max(dfs_output.ccnum.values()) + 1)]
+    max_cc = max(dfs_output.ccnum.values())
+    cc = [list() for _ in range(max_cc + 1)]
     for node, ccnum in dfs_output.ccnum.items():
         cc[ccnum].append(node)
-    # print(f"cc list: {cc}")
     
     meta_g_nodes = [ccnum[0] for ccnum in cc[1:]]
     meta_g = DiGraph()
