@@ -15,13 +15,23 @@ Additional details may be found in Ed Discussions. Please be sure to review that
 ## Practice Problems
 
 ### [DPV] Problem 8.1 (TSP optimization versus search)
-[Problem statements]
+TSP:
+Input: A matrix of distances between n cities, a budget b.
+Output: A tour that passes through all the cities and total length <= n, if such a tour exists, and NO otherwise.
+
+TSP optimization (TSP-OPT):
+Input: A matrix of distances between n cities.
+Output: The shortest tour that passes through all the cities.
+
+Show that if TSP can be solved in polynomial time, then TSP optimization can also be solved in polynomial time.
+
 #### Solution
-[TODO]:
+If TSP can be solved in polynomial time, we can binary search the budget b to find the shortest tour. This is binary search problem in a order boolean space, which can be solved in O(log n) time. Suppose TSP can be solved in O(f(n)) time, then TSP-OPT can be solved in O(f(n) log n) time, which is polynomial if f(n) is polynomial.
 
 
 ### [DPV] Problem 8.3 (Stingy SAT)
-[Problem statements]
+Given a set of clauses and an integer k, find a satisfying assignment in which at most k variables are set to true, if exists. Prove that Stingy SAT is NP-complete. (Hint: reduce from Vertex Cover, which is NP-complete.)
+
 #### Solution
 [TODO]:
 
